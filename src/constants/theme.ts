@@ -36,6 +36,28 @@ export const Colors = {
 
 export const Radius = { sm: 8, md: 12, lg: 20, full: 999 } as const;
 
+export const Motion = {
+  enter: 320,
+  stagger: 45,
+  maxStaggerItems: 8,
+  press: 120,
+  pressScale: 0.96,
+  pulse: 800,
+  heroInterval: 5000,
+} as const;
+
+export const CardSize = { row: 124, topTen: 132, avatar: 84 } as const;
+
+/** Overlay colours that sit on top of photos, so they stay the same in both themes. */
+export const Overlay = {
+  scrimStart: 'rgba(0,0,0,0)',
+  scrimEnd: 'rgba(0,0,0,0.85)',
+  onImage: '#FFFFFF',
+  onImageMuted: 'rgba(255,255,255,0.75)',
+  dot: 'rgba(255,255,255,0.4)',
+  glass: 'rgba(0,0,0,0.45)',
+} as const;
+
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
 export const Fonts = Platform.select({
