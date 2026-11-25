@@ -32,7 +32,7 @@ export function MovieGrid({ movies, header, onEndReached, loadingMore, refreshin
       data={movies}
       numColumns={columns}
       keyExtractor={(movie) => String(movie.id)}
-      renderItem={({ item }) => <MovieCard movie={item} width={cardWidth} />}
+      renderItem={({ item, index }) => <MovieCard movie={item} width={cardWidth} index={index} />}
       ListHeaderComponent={header}
       columnWrapperStyle={{ gap: GAP }}
       contentContainerStyle={{ gap: GAP * 1.5, padding: GAP, alignSelf: 'center', width: contentWidth + GAP * 2 }}
