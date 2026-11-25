@@ -13,17 +13,20 @@ import { CardSize, Radius, Spacing } from '@/constants/theme';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useSearch } from '@/hooks/use-movies';
 import { useTheme } from '@/hooks/use-theme';
+import type { TranslationKey } from '@/lib/i18n';
+import { useLanguage } from '@/providers/language-provider';
 
 type Filter = 'all' | 'movie' | 'tv' | 'person';
-const FILTERS: { label: string; value: Filter }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Movies', value: 'movie' },
-  { label: 'TV Shows', value: 'tv' },
-  { label: 'People', value: 'person' },
+const FILTERS: { label: TranslationKey; value: Filter }[] = [
+  { label: 'search.all', value: 'all' },
+  { label: 'tab.movies', value: 'movie' },
+  { label: 'tab.tv', value: 'tv' },
+  { label: 'search.people', value: 'person' },
 ];
 
 export default function SearchScreen() {
   const theme = useTheme();
+  const { t } = useLanguage();
   const { width } = useWindowDimensions();
   const [text, setText] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
@@ -41,8 +44,8 @@ export default function SearchScreen() {
     content = (
       <StateView
         icon={{ ios: 'popcorn', android: 'movie', web: 'movie' }}
-        title="Search everything"
-        message="Movies, TV shows and people — type at least two letters."
+        title={t('search.idleTitle')}
+        message={t('search.idleMessage')}
       />
     );
   else if (query.isPending) content = <LoadingView />;
@@ -51,8 +54,8 @@ export default function SearchScreen() {
     content = (
       <StateView
         icon={{ ios: 'magnifyingglass', android: 'search_off', web: 'search_off' }}
-        title="No results"
-        message={`Nothing matches “${term}” here. Try another word or filter.`}
+        title={t('search.emptyTitle')}
+        message={t('search.emptyMessage', { term })}
       />
     );
   else if (filter === 'person') {
@@ -75,7 +78,7 @@ export default function SearchScreen() {
     content = (
       <MovieGrid
         movies={shownTitles}
-        header={filter === 'all' ? <View style={{ marginHorizontal: -Spacing.three }}><PeopleRow title="People" people={people} /></View> : undefined}
+        header={filter === 'all' ? <View style={{ marginHorizontal: -Spacing.three }}><PeopleRow title={t('search.people')} people={people} /></View> : undefined}
         onEndReached={loadMore}
         loadingMore={query.isFetchingNextPage}
       />
@@ -88,7 +91,7 @@ export default function SearchScreen() {
           <TextInput
             value={text}
             onChangeText={setText}
-            placeholder="Movies, shows, people"
+            placeholder={t('search.placeholder')}
             placeholderTextColor={theme.textSecondary}
             autoCorrect={false}
             returnKeyType="search"
@@ -106,7 +109,7 @@ export default function SearchScreen() {
                   accessibilityState={{ selected: active }}
                   style={[styles.filter, { backgroundColor: active ? theme.accent : theme.backgroundElement }]}>
                   <ThemedText type="smallBold" style={{ color: active ? theme.onAccent : theme.text }}>
-                    {f.label}
+                    {t(f.label)}
                   </ThemedText>
                 </Pressable>
               );

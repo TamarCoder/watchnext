@@ -2,6 +2,13 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_URL = 'https://image.tmdb.org/t/p';
 const TOKEN = process.env.EXPO_PUBLIC_TMDB_TOKEN;
 
+let apiLanguage = 'en-US';
+
+/** Set by LanguageProvider; every request after this uses the new language. */
+export function setApiLanguage(language: string) {
+  apiLanguage = language;
+}
+
 export type MediaType = 'movie' | 'tv';
 
 /** A movie or a TV show, normalized to one shape. */
@@ -72,7 +79,7 @@ type Params = Record<string, string | number>;
 async function request<T>(path: string, params: Params = {}): Promise<T> {
   if (!TOKEN) throw new TmdbError('missing-token', 'TMDB token is not set');
 
-  const query = new URLSearchParams({ language: 'en-US', ...params } as Record<string, string>);
+  const query = new URLSearchParams({ language: apiLanguage, ...params } as Record<string, string>);
   let response: Response;
   try {
     response = await fetch(`${BASE_URL}${path}?${query}`, {
@@ -92,7 +99,7 @@ async function request<T>(path: string, params: Params = {}): Promise<T> {
 
 type RawTitle = Partial<Movie> & { name?: string; first_air_date?: string; media_type?: string };
 
-function toTitle(raw: RawTitle, media: MediaType): Movie {
+export function toTitle(raw: RawTitle, media: MediaType): Movie {
   return {
     id: raw.id ?? 0,
     media,
@@ -121,15 +128,6 @@ export type ListKind =
   | 'on_the_air'
   | 'airing_today';
 
-export const LIST_TITLES: Record<ListKind, string> = {
-  trending: 'Trending this week',
-  popular: 'Popular',
-  top_rated: 'All-time best',
-  now_playing: 'Now in cinemas',
-  upcoming: 'Coming soon',
-  on_the_air: 'On the air',
-  airing_today: 'Airing today',
-};
 
 function list(media: MediaType, kind: ListKind, page: number) {
   const path = kind === 'trending' ? `/trending/${media}/week` : `/${media}/${kind}`;

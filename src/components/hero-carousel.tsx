@@ -9,12 +9,14 @@ import { Skeleton } from '@/components/skeleton';
 import { ThemedText } from '@/components/themed-text';
 import { Motion, Overlay, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/providers/language-provider';
 
 const MAX_HEIGHT = 520;
 
 /** Full-width backdrops that page automatically every few seconds. */
 export function HeroCarousel({ items, loading }: { items?: Movie[]; loading?: boolean }) {
   const theme = useTheme();
+  const { t } = useLanguage();
   const { width } = useWindowDimensions();
   const height = Math.min(width * 0.62, MAX_HEIGHT);
   const list = useRef<FlatList<Movie>>(null);
@@ -58,7 +60,7 @@ export function HeroCarousel({ items, loading }: { items?: Movie[]; loading?: bo
                 </ThemedText>
                 <View style={[styles.button, { backgroundColor: theme.accent }]}>
                   <ThemedText type="smallBold" style={{ color: theme.onAccent }}>
-                    More info
+                    {t('home.moreInfo')}
                   </ThemedText>
                 </View>
               </View>

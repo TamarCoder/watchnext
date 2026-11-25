@@ -4,7 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
 
 import { TmdbError } from '@/api/tmdb';
-import { FavoritesProvider } from '@/providers/favorites-provider';
+import { LanguageProvider } from '@/providers/language-provider';
+import { LibraryProvider } from '@/providers/library-provider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,19 +24,21 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <FavoritesProvider>
-        <ThemeProvider value={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <StatusBar style="auto" />
-          <Stack screenOptions={{ animation: 'slide_from_right', headerBackTitle: 'Back' }}>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="movie/[id]" options={detailOptions} />
-            <Stack.Screen name="tv/[id]" options={detailOptions} />
-            <Stack.Screen name="person/[id]" options={{ title: '' }} />
-            <Stack.Screen name="genre/[id]" options={{ title: '' }} />
-            <Stack.Screen name="list/[kind]" options={{ title: '' }} />
-          </Stack>
-        </ThemeProvider>
-      </FavoritesProvider>
+      <LanguageProvider>
+        <LibraryProvider>
+          <ThemeProvider value={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <StatusBar style="auto" />
+            <Stack screenOptions={{ animation: 'slide_from_right', headerBackTitle: 'Back' }}>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="movie/[id]" options={detailOptions} />
+              <Stack.Screen name="tv/[id]" options={detailOptions} />
+              <Stack.Screen name="person/[id]" options={{ title: '' }} />
+              <Stack.Screen name="genre/[id]" options={{ title: '' }} />
+              <Stack.Screen name="list/[kind]" options={{ title: '' }} />
+            </Stack>
+          </ThemeProvider>
+        </LibraryProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

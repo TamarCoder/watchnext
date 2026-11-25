@@ -46,7 +46,40 @@ export const Motion = {
   heroInterval: 5000,
 } as const;
 
-export const CardSize = { row: 124, topTen: 132, avatar: 84 } as const;
+export const CardSize = { row: 124, topTen: 132, avatar: 84, genre: 148 } as const;
+
+/** Gradient pair and emoji for each TMDB genre id (movie and TV ids). */
+export const GenreStyle: Record<number, { colors: [string, string]; icon: string }> = {
+  28: { colors: ['#FF512F', '#DD2476'], icon: '💥' },
+  12: { colors: ['#F7971E', '#FFD200'], icon: '🧭' },
+  16: { colors: ['#00C6FF', '#0072FF'], icon: '🎨' },
+  35: { colors: ['#F9D423', '#FF4E50'], icon: '😂' },
+  80: { colors: ['#434343', '#000000'], icon: '🕵️' },
+  99: { colors: ['#11998E', '#38EF7D'], icon: '🎥' },
+  18: { colors: ['#8E2DE2', '#4A00E0'], icon: '🎭' },
+  10751: { colors: ['#F857A6', '#FF5858'], icon: '👨‍👩‍👧' },
+  14: { colors: ['#7F00FF', '#E100FF'], icon: '🧙' },
+  36: { colors: ['#B79891', '#94716B'], icon: '🏛️' },
+  27: { colors: ['#870000', '#190A05'], icon: '👻' },
+  10402: { colors: ['#FC466B', '#3F5EFB'], icon: '🎵' },
+  9648: { colors: ['#232526', '#414345'], icon: '🔍' },
+  10749: { colors: ['#EE9CA7', '#FF5E62'], icon: '💘' },
+  878: { colors: ['#0F2027', '#2C5364'], icon: '🚀' },
+  10770: { colors: ['#536976', '#292E49'], icon: '📺' },
+  53: { colors: ['#C31432', '#240B36'], icon: '🔪' },
+  10752: { colors: ['#3A6073', '#16222A'], icon: '⚔️' },
+  37: { colors: ['#C79081', '#DFA579'], icon: '🤠' },
+  10759: { colors: ['#FF512F', '#F09819'], icon: '💥' },
+  10762: { colors: ['#43E97B', '#38F9D7'], icon: '🧸' },
+  10763: { colors: ['#2B5876', '#4E4376'], icon: '📰' },
+  10764: { colors: ['#F2994A', '#F2C94C'], icon: '🎤' },
+  10765: { colors: ['#4776E6', '#8E54E9'], icon: '🛸' },
+  10766: { colors: ['#DA4453', '#89216B'], icon: '💔' },
+  10767: { colors: ['#00B4DB', '#0083B0'], icon: '🎙️' },
+  10768: { colors: ['#485563', '#29323C'], icon: '🗳️' },
+};
+
+export const DefaultGenreStyle = { colors: ['#485563', '#29323C'] as [string, string], icon: '🎬' };
 
 /** Overlay colours that sit on top of photos, so they stay the same in both themes. */
 export const Overlay = {

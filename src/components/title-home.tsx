@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { LIST_TITLES, type ListKind, type MediaType } from '@/api/tmdb';
+import { type ListKind, type MediaType } from '@/api/tmdb';
 import { GenreChips } from '@/components/genre-chips';
 import { HeroCarousel } from '@/components/hero-carousel';
+import { LanguageToggle } from '@/components/language-toggle';
 import { PeopleRow } from '@/components/people-row';
 import { ScreenTitle } from '@/components/screen-title';
 import { ErrorView } from '@/components/state-view';
@@ -15,6 +16,7 @@ import { TopTenRow } from '@/components/top-ten-row';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useGenres, usePopularPeople, useTitleList } from '@/hooks/use-movies';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/providers/language-provider';
 
 const ROWS: Record<MediaType, ListKind[]> = {
   movie: ['now_playing', 'upcoming', 'top_rated', 'popular'],
@@ -23,9 +25,10 @@ const ROWS: Record<MediaType, ListKind[]> = {
 
 function ListRow({ media, kind }: { media: MediaType; kind: ListKind }) {
   const query = useTitleList(media, kind);
+  const { t } = useLanguage();
   return (
     <TitleRow
-      title={LIST_TITLES[kind]}
+      title={t(`list.${kind}`)}
       items={query.data?.results.filter((m) => m.poster_path)}
       loading={query.isPending}
       href={{ pathname: '/list/[kind]', params: { kind, media } }}
@@ -34,8 +37,9 @@ function ListRow({ media, kind }: { media: MediaType; kind: ListKind }) {
 }
 
 /** The Home layout shared by the Movies and TV tabs. */
-export function TitleHome({ media, title }: { media: MediaType; title: string }) {
+export function TitleHome({ media }: { media: MediaType }) {
   const theme = useTheme();
+  const { t } = useLanguage();
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
   const trending = useTitleList(media, 'trending');
@@ -62,17 +66,18 @@ export function TitleHome({ media, title }: { media: MediaType; title: string })
         <ScrollView
           contentContainerStyle={{ paddingBottom: Spacing.six }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={theme.accent} />}>
-          <View style={{ paddingHorizontal: Spacing.three }}>
-            <ScreenTitle title={title} />
+          <View style={{ paddingHorizontal: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <ScreenTitle title={t(media === 'tv' ? 'tab.tv' : 'tab.movies')} />
+            <LanguageToggle />
           </View>
           <HeroCarousel items={trending.data?.results} loading={trending.isPending} />
           <View style={{ width: '100%', maxWidth: MaxContentWidth * 1.6, alignSelf: 'center' }}>
-            <TopTenRow title="Top 10 this week" items={trending.data?.results.filter((m) => m.poster_path)} />
+            <TopTenRow title={t('home.top10')} items={trending.data?.results.filter((m) => m.poster_path)} />
             <GenreChips genres={genres.data} media={media} />
             <ListRow media={media} kind={ROWS[media][0]} />
             <ListRow media={media} kind={ROWS[media][1]} />
             <PeopleRow
-              title="Popular people"
+              title={t('home.people')}
               people={people.data?.map((p) => ({ ...p, subtitle: p.known_for_department }))}
             />
             <ListRow media={media} kind={ROWS[media][2]} />

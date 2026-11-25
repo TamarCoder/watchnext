@@ -5,6 +5,7 @@ import { TmdbError } from '@/api/tmdb';
 import { ThemedText } from '@/components/themed-text';
 import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/providers/language-provider';
 
 type IconName = SymbolViewProps['name'];
 
@@ -42,38 +43,28 @@ export function StateView({ icon, title, message, actionLabel, onAction, tone = 
   );
 }
 
-const ERROR_COPY: Record<TmdbError['kind'], { icon: IconName; title: string; message: string }> = {
-  'missing-token': {
-    icon: { ios: 'key.slash', android: 'key_off', web: 'key_off' },
-    title: 'API token missing',
-    message: 'Add EXPO_PUBLIC_TMDB_TOKEN to your .env file and restart the app.',
-  },
-  unauthorized: {
-    icon: { ios: 'lock.slash', android: 'lock', web: 'lock' },
-    title: 'Access denied',
-    message: 'Your TMDB token is not valid. Check it and try again.',
-  },
-  'not-found': {
-    icon: { ios: 'film', android: 'movie', web: 'movie' },
-    title: 'Movie not found',
-    message: 'This movie may have been removed from TMDB.',
-  },
-  network: {
-    icon: { ios: 'wifi.slash', android: 'wifi_off', web: 'wifi_off' },
-    title: 'You are offline',
-    message: 'Check your internet connection and try again.',
-  },
-  server: {
-    icon: { ios: 'exclamationmark.triangle', android: 'warning', web: 'warning' },
-    title: 'Something went wrong',
-    message: 'TMDB is not responding right now. Please try again soon.',
-  },
+const ERROR_ICONS: Record<TmdbError['kind'], IconName> = {
+  'missing-token': { ios: 'key.slash', android: 'key_off', web: 'key_off' },
+  unauthorized: { ios: 'lock.slash', android: 'lock', web: 'lock' },
+  'not-found': { ios: 'film', android: 'movie', web: 'movie' },
+  network: { ios: 'wifi.slash', android: 'wifi_off', web: 'wifi_off' },
+  server: { ios: 'exclamationmark.triangle', android: 'warning', web: 'warning' },
 };
 
 export function ErrorView({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   const kind = error instanceof TmdbError ? error.kind : 'server';
+  const { t } = useLanguage();
   const canRetry = kind === 'network' || kind === 'server';
-  return <StateView {...ERROR_COPY[kind]} tone="danger" actionLabel={canRetry ? 'Try again' : undefined} onAction={onRetry} />;
+  return (
+    <StateView
+      icon={ERROR_ICONS[kind]}
+      title={t(`error.${kind}.title`)}
+      message={t(`error.${kind}.message`)}
+      tone="danger"
+      actionLabel={canRetry ? t('common.tryAgain') : undefined}
+      onAction={onRetry}
+    />
+  );
 }
 
 export function LoadingView() {

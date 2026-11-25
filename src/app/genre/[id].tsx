@@ -10,16 +10,19 @@ import { ThemedView } from '@/components/themed-view';
 import { Radius, Spacing } from '@/constants/theme';
 import { useDiscover } from '@/hooks/use-movies';
 import { useTheme } from '@/hooks/use-theme';
+import type { TranslationKey } from '@/lib/i18n';
+import { useLanguage } from '@/providers/language-provider';
 
-const SORTS = [
-  { label: 'Popular', value: 'popularity.desc' },
-  { label: 'Top rated', value: 'vote_average.desc' },
-  { label: 'Newest', value: 'primary_release_date.desc' },
+const SORTS: { label: TranslationKey; value: string }[] = [
+  { label: 'genre.popular', value: 'popularity.desc' },
+  { label: 'genre.topRated', value: 'vote_average.desc' },
+  { label: 'genre.newest', value: 'primary_release_date.desc' },
 ];
 
 export default function GenreScreen() {
   const { id, name, media } = useLocalSearchParams<{ id: string; name: string; media: MediaType }>();
   const theme = useTheme();
+  const { t } = useLanguage();
   const [sort, setSort] = useState(SORTS[0].value);
   const type: MediaType = media === 'tv' ? 'tv' : 'movie';
   // TV uses first_air_date instead of primary_release_date.
@@ -38,7 +41,7 @@ export default function GenreScreen() {
             accessibilityState={{ selected: active }}
             style={[styles.chip, { backgroundColor: active ? theme.accent : theme.backgroundElement }]}>
             <ThemedText type="smallBold" style={{ color: active ? theme.onAccent : theme.text }}>
-              {s.label}
+              {t(s.label)}
             </ThemedText>
           </Pressable>
         );
@@ -50,7 +53,7 @@ export default function GenreScreen() {
   if (query.isPending) content = <LoadingView />;
   else if (query.isError) content = <ErrorView error={query.error} onRetry={() => query.refetch()} />;
   else if (!items.length)
-    content = <StateView icon={{ ios: 'film', android: 'movie', web: 'movie' }} title="Nothing here" message="No titles match this genre yet." />;
+    content = <StateView icon={{ ios: 'film', android: 'movie', web: 'movie' }} title={t('genre.emptyTitle')} message={t('genre.emptyMessage')} />;
   else
     content = (
       <MovieGrid

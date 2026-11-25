@@ -5,9 +5,11 @@ import type { Review } from '@/api/tmdb';
 import { ThemedText } from '@/components/themed-text';
 import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/providers/language-provider';
 
 export function ReviewCard({ review }: { review: Review }) {
   const theme = useTheme();
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const rating = review.author_details.rating;
 
@@ -38,7 +40,7 @@ export function ReviewCard({ review }: { review: Review }) {
         {review.content}
       </ThemedText>
       <ThemedText type="smallBold" style={{ color: theme.accent, marginTop: Spacing.one }}>
-        {open ? 'Show less' : 'Read more'}
+        {open ? t('common.showLess') : t('common.readMore')}
       </ThemedText>
     </Pressable>
   );

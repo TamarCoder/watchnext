@@ -12,14 +12,16 @@ import { ThemedView } from '@/components/themed-view';
 import { Motion, Radius, Spacing } from '@/constants/theme';
 import { usePerson } from '@/hooks/use-movies';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/providers/language-provider';
 
-function formatDate(date: string | null) {
-  return date ? new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : null;
+function formatDate(date: string | null, lang: string) {
+  return date ? new Date(date).toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' }) : null;
 }
 
 export default function PersonScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const theme = useTheme();
+  const { t, lang } = useLanguage();
   const query = usePerson(Number(id));
   const [bioOpen, setBioOpen] = useState(false);
 
@@ -28,7 +30,7 @@ export default function PersonScreen() {
     return <ThemedView style={{ flex: 1 }}><ErrorView error={query.error} onRetry={() => query.refetch()} /></ThemedView>;
 
   const p = query.data;
-  const born = [formatDate(p.birthday), p.place_of_birth].filter(Boolean).join(' · ');
+  const born = [formatDate(p.birthday, lang), p.place_of_birth].filter(Boolean).join(' · ');
 
   const header = (
     <Animated.View entering={FadeInDown.duration(Motion.enter)} style={styles.header}>
@@ -39,7 +41,7 @@ export default function PersonScreen() {
         <View style={{ flex: 1, gap: Spacing.one }}>
           <ThemedText type="subtitle" style={{ fontSize: 26, lineHeight: 32 }}>{p.name}</ThemedText>
           <ThemedText type="smallBold" style={{ color: theme.accent }}>{p.known_for_department}</ThemedText>
-          {born ? <ThemedText type="small" themeColor="textSecondary">Born {born}</ThemedText> : null}
+          {born ? <ThemedText type="small" themeColor="textSecondary">{t('person.born', { value: born })}</ThemedText> : null}
         </View>
       </View>
       {p.biography ? (
@@ -50,11 +52,11 @@ export default function PersonScreen() {
           }}>
           <ThemedText numberOfLines={bioOpen ? undefined : 5}>{p.biography}</ThemedText>
           <ThemedText type="smallBold" style={{ color: theme.accent, marginTop: Spacing.one }}>
-            {bioOpen ? 'Show less' : 'Read more'}
+            {bioOpen ? t('common.showLess') : t('common.readMore')}
           </ThemedText>
         </Pressable>
       ) : null}
-      <ThemedText style={{ fontSize: 20, fontWeight: 700 }}>Known for ({p.credits.length})</ThemedText>
+      <ThemedText style={{ fontSize: 20, fontWeight: 700 }}>{t('person.knownFor', { count: p.credits.length })}</ThemedText>
     </Animated.View>
   );
 

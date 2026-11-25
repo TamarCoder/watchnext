@@ -7,11 +7,13 @@ import { imageUrl, titleHref, type Movie } from '@/api/tmdb';
 import { ThemedText } from '@/components/themed-text';
 import { Motion, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/providers/language-provider';
 
 type MovieCardProps = { movie: Movie; width: number; index: number };
 
 export function MovieCard({ movie, width, index }: MovieCardProps) {
   const theme = useTheme();
+  const { t } = useLanguage();
   const scale = useSharedValue(1);
   const pressStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   const poster = imageUrl(movie.poster_path);
@@ -32,7 +34,7 @@ export function MovieCard({ movie, width, index }: MovieCardProps) {
                 <Image source={poster} style={StyleSheet.absoluteFill} contentFit="cover" transition={200} />
               ) : (
                 <ThemedText themeColor="textSecondary" style={styles.noPoster}>
-                  No poster
+                  {t('common.noPoster')}
                 </ThemedText>
               )}
               <View style={[styles.badge, { backgroundColor: theme.background }]}>

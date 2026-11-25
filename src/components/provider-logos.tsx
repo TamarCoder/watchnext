@@ -5,13 +5,15 @@ import { imageUrl, PROVIDER_REGION, type Provider } from '@/api/tmdb';
 import { SectionHeader } from '@/components/section-header';
 import { ThemedText } from '@/components/themed-text';
 import { Radius, Spacing } from '@/constants/theme';
+import { useLanguage } from '@/providers/language-provider';
 
 export function ProviderLogos({ providers }: { providers: Provider[] }) {
+  const { t } = useLanguage();
   if (!providers.length) return null;
 
   return (
     <View style={{ marginBottom: Spacing.four }}>
-      <SectionHeader title={`Where to watch (${PROVIDER_REGION})`} />
+      <SectionHeader title={t('details.whereToWatch', { region: PROVIDER_REGION })} />
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.list}>
         {providers.map((p) => (
           <View key={p.provider_id} style={styles.item}>
@@ -23,7 +25,7 @@ export function ProviderLogos({ providers }: { providers: Provider[] }) {
         ))}
       </ScrollView>
       <ThemedText type="small" themeColor="textSecondary" style={styles.credit}>
-        Streaming data by JustWatch
+        {t('details.justWatch')}
       </ThemedText>
     </View>
   );

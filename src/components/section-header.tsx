@@ -4,9 +4,11 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/providers/language-provider';
 
 export function SectionHeader({ title, href }: { title: string; href?: Href }) {
   const theme = useTheme();
+  const { t } = useLanguage();
 
   return (
     <View style={styles.row}>
@@ -15,7 +17,7 @@ export function SectionHeader({ title, href }: { title: string; href?: Href }) {
         <Link href={href} asChild>
           <Pressable hitSlop={12} accessibilityRole="link">
             <ThemedText type="smallBold" style={{ color: theme.accent }}>
-              See all
+              {t('common.seeAll')}
             </ThemedText>
           </Pressable>
         </Link>
