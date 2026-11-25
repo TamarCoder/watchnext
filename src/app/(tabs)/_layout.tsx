@@ -11,8 +11,12 @@ export default function TabsLayout() {
       indicatorColor={theme.backgroundElement}
       labelStyle={{ selected: { color: theme.accent } }}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Trending</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="flame.fill" md="local_fire_department" selectedColor={theme.accent} />
+        <NativeTabs.Trigger.Label>Movies</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="film.fill" md="movie" selectedColor={theme.accent} />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="tv">
+        <NativeTabs.Trigger.Label>TV Shows</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="tv.fill" md="tv" selectedColor={theme.accent} />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="search">
         <NativeTabs.Trigger.Label>Search</NativeTabs.Trigger.Label>
