@@ -1,5 +1,7 @@
 # 🎬 Movie Catalog
 
+[![CI](https://github.com/TamarCoder/movie-catalog/actions/workflows/ci.yml/badge.svg)](https://github.com/TamarCoder/movie-catalog/actions/workflows/ci.yml)
+
 A cross-platform movie catalog for **iOS, Android and web**, built with React Native and Expo.
 Browse trending movies, search the full TMDB catalog, open details, and save favorites.
 
