@@ -10,11 +10,13 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,
-      // Retrying a bad token or a missing movie will not help.
+      // Retrying a bad token or a missing title will not help.
       retry: (count, error) => !(error instanceof TmdbError && error.kind !== 'network') && count < 2,
     },
   },
 });
+
+const detailOptions = { title: '', headerTransparent: true, headerBackTitle: 'Back' } as const;
 
 export default function RootLayout() {
   const scheme = useColorScheme();
@@ -24,9 +26,13 @@ export default function RootLayout() {
       <FavoritesProvider>
         <ThemeProvider value={scheme === 'dark' ? DarkTheme : DefaultTheme}>
           <StatusBar style="auto" />
-          <Stack>
+          <Stack screenOptions={{ animation: 'slide_from_right', headerBackTitle: 'Back' }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="movie/[id]" options={{ title: '', headerTransparent: true, headerBackTitle: 'Back' }} />
+            <Stack.Screen name="movie/[id]" options={detailOptions} />
+            <Stack.Screen name="tv/[id]" options={detailOptions} />
+            <Stack.Screen name="person/[id]" options={{ title: '' }} />
+            <Stack.Screen name="genre/[id]" options={{ title: '' }} />
+            <Stack.Screen name="list/[kind]" options={{ title: '' }} />
           </Stack>
         </ThemeProvider>
       </FavoritesProvider>
