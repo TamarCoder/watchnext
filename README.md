@@ -13,10 +13,13 @@ Browse trending movies, search the full TMDB catalog, open details, and save fav
 
 ## Features
 
-- **Trending** — weekly trending movies with infinite scroll and pull-to-refresh
-- **Search** — debounced search with paging
-- **Details** — backdrop, poster, runtime, rating, genres, overview
-- **Favorites** — saved on the device, kept between launches
+- **Movies & TV Shows home** — auto-playing hero carousel, Top 10 row, genre chips, Now in cinemas, Coming soon, All-time best, Popular people
+- **Details** — parallax backdrop, YouTube trailer, cast, director, where to watch, reviews, similar titles
+- **People** — photo, biography and every movie or show they are known for
+- **Genres & "See all"** — infinite grids with sorting (popular, top rated, newest)
+- **Search** — movies, TV shows and people in one search, with filter tabs
+- **Favorites** — movies and shows saved on the device, kept between launches
+- **Motion** — staggered card entrance, press feedback, skeleton loaders, slide transitions
 - **Dark mode** — follows the system theme; every colour comes from one token file
 - **Any screen size** — the grid picks 2–5 columns from the screen width; the details screen switches to a two-column layout on tablets
 - **Clear error screens** — offline, bad token, missing movie, server error, empty search; each with its own icon, text and a retry button when retrying can help
@@ -28,7 +31,8 @@ Browse trending movies, search the full TMDB catalog, open details, and save fav
 | Framework | React Native + Expo (SDK 58), TypeScript (strict) |
 | Navigation | Expo Router — file-based routes, native tabs |
 | Server state | TanStack Query — caching, paging, retry |
-| Images | expo-image — caching and fade-in |
+| Images | expo-image — caching and fade-in; expo-linear-gradient for overlays |
+| Motion | react-native-reanimated — entrance, press and parallax animations |
 | Icons | expo-symbols — SF Symbols on iOS, Material Symbols on Android |
 | Storage | AsyncStorage — favorites |
 | Quality | ESLint (eslint-config-expo), `tsc --noEmit`, expo-doctor |
@@ -37,13 +41,18 @@ Browse trending movies, search the full TMDB catalog, open details, and save fav
 
 ```
 src/
-├── api/          tmdb.ts — the only file that talks to TMDB; typed errors
+├── api/          tmdb.ts — the only file that talks to TMDB; typed errors,
+│                 movies and TV normalized into one shape
 ├── app/          routes (Expo Router)
-│   ├── (tabs)/   Trending · Search · Favorites
-│   └── movie/    [id].tsx — details
-├── components/   MovieCard, MovieGrid, StateView / ErrorView / LoadingView
-├── constants/    theme.ts — colour, spacing and radius tokens
-├── hooks/        useTrending, useMovieSearch, useMovie, useTheme, useDebounce
+│   ├── (tabs)/   Movies · TV Shows · Search · Favorites
+│   ├── movie/ tv/ [id].tsx — one shared details screen
+│   ├── person/   [id].tsx — person page
+│   ├── genre/    [id].tsx — genre grid with sorting
+│   └── list/     [kind].tsx — "See all" grid
+├── components/   TitleHome, HeroCarousel, TitleRow, TopTenRow, TitleDetails,
+│                 MovieCard, MovieGrid, Skeleton, StateView / ErrorView
+├── constants/    theme.ts — colour, spacing, radius and motion tokens
+├── hooks/        useTitleList, useTitle, usePerson, useSearch, useTheme …
 └── providers/    FavoritesProvider
 ```
 
