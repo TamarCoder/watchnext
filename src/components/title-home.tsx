@@ -4,11 +4,11 @@ import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { type ListKind, type MediaType } from '@/api/tmdb';
+import { AppLogo } from '@/components/app-logo';
 import { GenreChips } from '@/components/genre-chips';
 import { HeroCarousel } from '@/components/hero-carousel';
 import { LanguageToggle } from '@/components/language-toggle';
 import { PeopleRow } from '@/components/people-row';
-import { ScreenTitle } from '@/components/screen-title';
 import { ErrorView } from '@/components/state-view';
 import { ThemedView } from '@/components/themed-view';
 import { TitleRow } from '@/components/title-row';
@@ -67,7 +67,7 @@ export function TitleHome({ media }: { media: MediaType }) {
           contentContainerStyle={{ paddingBottom: Spacing.six }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={theme.accent} />}>
           <View style={{ paddingHorizontal: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <ScreenTitle title={t(media === 'tv' ? 'tab.tv' : 'tab.movies')} />
+            <AppLogo />
             <LanguageToggle />
           </View>
           <HeroCarousel items={trending.data?.results} loading={trending.isPending} />

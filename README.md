@@ -1,8 +1,15 @@
-# 🎬 Movie Catalog
+<p align="center">
+  <img src="assets/images/icon.png" width="96" alt="Watchnext icon" />
+</p>
+<p align="center">
+  <img src="docs/wordmark.png" width="360" alt="watchnext" />
+</p>
+
+# Watchnext
 
 [![CI](https://github.com/TamarCoder/movie-catalog/actions/workflows/ci.yml/badge.svg)](https://github.com/TamarCoder/movie-catalog/actions/workflows/ci.yml)
 
-A cross-platform movie catalog for **iOS, Android and web**, built with React Native and Expo.
+**Watchnext** is a cross-platform movie and TV catalog for **iOS, Android and web**, built with React Native and Expo.
 Browse trending movies, search the full TMDB catalog, open details, and save favorites.
 
 <p align="center">
