@@ -18,8 +18,10 @@ Browse trending movies, search the full TMDB catalog, open details, and save fav
 - **People** — photo, biography and every movie or show they are known for
 - **Genres & "See all"** — infinite grids with sorting (popular, top rated, newest)
 - **Search** — movies, TV shows and people in one search, with filter tabs
-- **Favorites** — movies and shows saved on the device, kept between launches
-- **Motion** — staggered card entrance, press feedback, skeleton loaders, slide transitions
+- **My List** — mark titles as *Want to watch*, *Watching* or *Watched* and rate them 1–5 stars; saved on the device
+- **Georgian & English** — one tap switches the whole UI and the TMDB content (titles, overviews, genres)
+- **Motion** — staggered card entrance, press feedback, haptics, skeleton loaders, slide transitions
+- **Genre tiles** — each genre has its own gradient and icon
 - **Dark mode** — follows the system theme; every colour comes from one token file
 - **Any screen size** — the grid picks 2–5 columns from the screen width; the details screen switches to a two-column layout on tablets
 - **Clear error screens** — offline, bad token, missing movie, server error, empty search; each with its own icon, text and a retry button when retrying can help
@@ -34,8 +36,10 @@ Browse trending movies, search the full TMDB catalog, open details, and save fav
 | Images | expo-image — caching and fade-in; expo-linear-gradient for overlays |
 | Motion | react-native-reanimated — entrance, press and parallax animations |
 | Icons | expo-symbols — SF Symbols on iOS, Material Symbols on Android |
-| Storage | AsyncStorage — favorites |
-| Quality | ESLint (eslint-config-expo), `tsc --noEmit`, expo-doctor |
+| Storage | AsyncStorage — My List and language choice |
+| Localization | expo-localization + a small typed dictionary (`src/lib/i18n.ts`) |
+| Testing | Jest (jest-expo) — 15 unit tests for the library, i18n and API helpers |
+| Quality | ESLint (eslint-config-expo), `tsc --noEmit`, expo-doctor, Jest |
 
 ## Architecture
 
@@ -53,7 +57,8 @@ src/
 │                 MovieCard, MovieGrid, Skeleton, StateView / ErrorView
 ├── constants/    theme.ts — colour, spacing, radius and motion tokens
 ├── hooks/        useTitleList, useTitle, usePerson, useSearch, useTheme …
-└── providers/    FavoritesProvider
+├── lib/          library.ts (watch-list logic), i18n.ts (translations) — pure, unit-tested
+└── providers/    LibraryProvider, LanguageProvider
 ```
 
 **Why these choices**
@@ -61,7 +66,8 @@ src/
 - **Expo + Expo Router.** One TypeScript codebase for three platforms. Routes are files, so the folder tree *is* the navigation map.
 - **TanStack Query instead of a global store.** Almost all state here is server data. Query gives caching, loading/error states, paging and retry for free, so there is no hand-written reducer.
 - **One API module with typed errors.** `tmdb.ts` turns every failure into a `TmdbError` with a `kind` (`network`, `unauthorized`, `not-found`, …). Screens never read HTTP codes; `ErrorView` maps each kind to the right message, and the query client does not retry errors that a retry cannot fix.
-- **Context for favorites.** It is small, local, device-only state. A store library would be more code than the feature itself.
+- **Pure logic, thin providers.** Watch-list rules (`lib/library.ts`) and translations (`lib/i18n.ts`) are plain functions with tests. React Context only stores the result and saves it, so the logic can be tested without rendering anything.
+- **Typed translations.** Every key exists in English; the Georgian dictionary must have the same keys or TypeScript fails the build.
 - **Design tokens.** Light and dark palettes live in `constants/theme.ts`. Components only read tokens through `useTheme()`, so no colour is hard-coded in a screen.
 
 ## Getting started
@@ -87,7 +93,8 @@ src/
 |---|---|
 | `npm start` | Start the Expo dev server |
 | `npm run lint` | ESLint |
-| `npx tsc --noEmit` | Type check |
+| `npm run typecheck` | Type check |
+| `npm test` | Unit tests |
 
 ## Attribution
 
