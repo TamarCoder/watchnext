@@ -13,12 +13,26 @@
 Browse trending movies, search the full TMDB catalog, open details, and save favorites.
 
 <p align="center">
-  <img src="docs/screenshots/trending-dark.png" width="230" alt="Trending screen, dark mode" />
-  <img src="docs/screenshots/details-light.png" width="230" alt="Movie details, light mode" />
-  <img src="docs/screenshots/error-offline.png" width="230" alt="Offline error screen" />
+  <img src="docs/screenshots/01-home-dark.png" width="230" alt="Movies home, dark mode" />
+  <img src="docs/screenshots/02-movie-dark.png" width="230" alt="Movie details, dark mode" />
+  <img src="docs/screenshots/04-person-dark.png" width="230" alt="Person page, dark mode" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/05-genre-dark.png" width="230" alt="Genre grid with sorting" />
+  <img src="docs/screenshots/08-movie-light.png" width="230" alt="Movie details, light mode" />
+  <img src="docs/screenshots/10-tv-home-light.png" width="230" alt="TV Shows home, light mode" />
 </p>
 
-<p align="center"><img src="docs/screenshots/demo.gif" width="300" alt="App demo" /></p>
+## About
+
+Watchnext helps you decide **what to watch next**. It brings the whole TMDB catalog of movies and TV shows into one fast, native app.
+
+- **Discover:** what is trending this week, what is in cinemas and what is coming soon.
+- **Explore:** open any title to see its trailer, cast, reviews and where to stream it. Then jump to an actor and see everything they have played.
+- **Keep track:** add titles to *My List*, mark them *Want to watch*, *Watching* or *Watched*, and rate them. Your list is saved on your device, so you do not need an account.
+- **Your language:** the whole app, including the TMDB content, works in English and Georgian.
+
+I built this project to show production-level mobile work: a typed API layer, clear error handling, smooth motion, unit tests, CI, and one design system for dark and light mode on every screen size.
 
 ## Features
 
@@ -57,7 +71,7 @@ src/
 ├── api/          tmdb.ts — the only file that talks to TMDB; typed errors,
 │                 movies and TV normalized into one shape
 ├── app/          routes (Expo Router)
-│   ├── (tabs)/   Movies · TV Shows · Search · Favorites
+│   ├── (tabs)/   Movies · TV Shows · Search · My List
 │   ├── movie/ tv/ [id].tsx — one shared details screen
 │   ├── person/   [id].tsx — person page
 │   ├── genre/    [id].tsx — genre grid with sorting
